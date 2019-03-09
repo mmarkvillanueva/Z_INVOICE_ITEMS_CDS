@@ -9,7 +9,7 @@ CLASS lcl_main DEFINITION CREATE PRIVATE.
 
   PUBLIC SECTION.
 
-    CLASS-METHODS create
+    CLASS-METHODS get_instance
       RETURNING
         VALUE(r_result) TYPE REF TO lcl_main.
 
@@ -19,14 +19,26 @@ CLASS lcl_main DEFINITION CREATE PRIVATE.
 
   PRIVATE SECTION.
 
+    CLASS-DATA: mo_main TYPE REF TO lcl_main.
+
+    METHODS: constructor.
+
 ENDCLASS.
 
 CLASS lcl_main IMPLEMENTATION.
 
-  METHOD create.
+  METHOD get_instance.
 
-    CREATE OBJECT r_result.
+    IF mo_main IS NOT BOUND.
+      mo_main = NEW lcl_main( ).
+    ENDIF.
 
+    r_result = mo_main.
+
+  ENDMETHOD.
+
+  METHOD constructor.
+    super->constructor( ).
   ENDMETHOD.
 
   METHOD run.
@@ -38,4 +50,4 @@ CLASS lcl_main IMPLEMENTATION.
 ENDCLASS.
 
 START-OF-SELECTION.
-  lcl_main=>create( )->run( ).
+  lcl_main=>get_instance( )->run( ).
